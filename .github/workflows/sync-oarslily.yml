@@ -24,14 +24,8 @@ jobs:
 
       - name: Sync oarslily folder
         run: |
-          # Remove existing folder if it exists
-          rm -rf packages/oarslily
-
-          # Create packages directory if it doesn't exist
-          mkdir -p packages
-
           # Copy the folder from cloned repo
-          cp -r temp-repo/packages/oarslily .
+          cp -r temp-repo/packages/oarslily/* .
 
           # Clean up temporary repository
           rm -rf temp-repo
@@ -40,7 +34,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add packages/oarslily
+          git add .
 
           # Only commit if there are changes
           if git diff --staged --quiet; then
