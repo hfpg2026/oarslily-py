@@ -1,18 +1,19 @@
 [project]
 name = "oarslily"
-version = "0.1.1a1"
+version = "0.1.3a13"
 description = "Add your description here"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.13"
 dependencies = [
-    "osslili>=1.6.1",
+    "osslili @ git+https://github.com/hfpg2026/osslili@47127a8778b82afff64f9aad04b65fc08997c2cd",
     "python-levenshtein>=0.27.3",
     "python-tlsh>=4.5.0",
+    "typer>=0.21.1",
 ]
 
-[tool.uv.sources]
-osslili = { git = "https://github.com/hfpg2026/osslili", rev = "60053be" }
-
 [project.scripts]
-oarslily = "oarslily.main:main"
+oarslily = "oarslily.cli:app"
+
+[tool.setuptools]
+packages = ["oarslily", "oarslily.core"]

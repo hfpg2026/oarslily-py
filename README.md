@@ -20,9 +20,9 @@ source .venv/bin/activate
 ```
 
 # Executing
-Run with
+Run oarslily to run in module mode, as oarslily is packaged as a CLI module.
 ```
-uv run main.py
+uv run -m oarslily.cli <directory of interest>
 ```
 
 # Additional notes
