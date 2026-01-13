@@ -1,0 +1,52 @@
+name: Sync Oarslily Package
+
+on:
+  schedule:
+    # Run daily at 2:00 AM UTC
+    - cron: "0 2 * * *"
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Clone source repository
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse https://${{ secrets.GITHUB_TOKEN }}@github.com/hfpg2026/legalfile.git temp-repo
+          cd temp-repo
+          git sparse-checkout set packages/oarslily
+
+      - name: Sync oarslily folder
+        run: |
+          # Remove existing folder if it exists
+          rm -rf packages/oarslily
+
+          # Create packages directory if it doesn't exist
+          mkdir -p packages
+
+          # Copy the folder from cloned repo
+          cp -r temp-repo/packages/oarslily .
+
+          # Clean up temporary repository
+          rm -rf temp-repo
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add packages/oarslily
+
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+            git commit -m "Sync oarslily package from hfpg2026/legalfile - $TIMESTAMP"
+            git push
+          fi
