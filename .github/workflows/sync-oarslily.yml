@@ -18,7 +18,7 @@ jobs:
 
       - name: Clone source repository
         run: |
-          git clone --depth 1 --filter=blob:none --sparse https://${{ secrets.GITHUB_TOKEN }}@github.com/hfpg2026/legalfile.git temp-repo
+          git clone --depth 1 --filter=blob:none --sparse https://${{ secrets.KEN_PAT }}@github.com/hfpg2026/legalfile.git temp-repo
           cd temp-repo
           git sparse-checkout set packages/oarslily
 
