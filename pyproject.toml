@@ -1,0 +1,18 @@
+[project]
+name = "oarslily"
+version = "0.1.1a1"
+description = "Add your description here"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.13"
+dependencies = [
+    "osslili>=1.6.1",
+    "python-levenshtein>=0.27.3",
+    "python-tlsh>=4.5.0",
+]
+
+[tool.uv.sources]
+osslili = { git = "https://github.com/hfpg2026/osslili", rev = "60053be" }
+
+[project.scripts]
+oarslily = "oarslily.main:main"
