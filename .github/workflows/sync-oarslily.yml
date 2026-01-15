@@ -24,8 +24,8 @@ jobs:
 
       - name: Sync oarslily folder
         run: |
-          # Copy the folder from cloned repo
-          cp -r temp-repo/packages/oarslily/* .
+          # Sync the folder from cloned repo
+          rsync -av --delete --exclude=.github temp-repo/packages/oarslily/ . 
 
           # Clean up temporary repository
           rm -rf temp-repo
