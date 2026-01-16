@@ -6,7 +6,7 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.13"
 dependencies = [
-    "osslili @ git+https://github.com/hfpg2026/osslili@bb46b2994901f6456e61f107e3c75c32c72effa0",
+    "osslili @ git+https://github.com/hfpg2026/osslili@ca308317e8b8c7829de67c64d21775b28873dc2b",
     "python-levenshtein>=0.27.3",
     "python-tlsh>=4.5.0",
     "typer>=0.21.1",
@@ -17,3 +17,6 @@ oarslily = "oarslily.cli:app"
 
 [tool.setuptools]
 packages = ["oarslily", "oarslily.core"]
+
+[tool.uv]
+package = true

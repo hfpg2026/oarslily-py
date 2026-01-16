@@ -180,7 +180,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "osslili", git = "https://github.com/hfpg2026/osslili?rev=47127a8778b82afff64f9aad04b65fc08997c2cd" },
+    { name = "osslili", git = "https://github.com/hfpg2026/osslili?rev=ca308317e8b8c7829de67c64d21775b28873dc2b" },
     { name = "python-levenshtein", specifier = ">=0.27.3" },
     { name = "python-tlsh", specifier = ">=4.5.0" },
     { name = "typer", specifier = ">=0.21.1" },
@@ -188,8 +188,8 @@ requires-dist = [
 
 [[package]]
 name = "osslili"
-version = "1.6.1"
-source = { git = "https://github.com/hfpg2026/osslili?rev=47127a8778b82afff64f9aad04b65fc08997c2cd#47127a8778b82afff64f9aad04b65fc08997c2cd" }
+version = "1.6.2"
+source = { git = "https://github.com/hfpg2026/osslili?rev=ca308317e8b8c7829de67c64d21775b28873dc2b#ca308317e8b8c7829de67c64d21775b28873dc2b" }
 dependencies = [
     { name = "click" },
     { name = "colorama" },

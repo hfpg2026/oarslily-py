@@ -60,7 +60,7 @@ def main(directory_path):
     paths = list_folders_recursive(directory_path)
 
     # Process a local directory
-    paths = paths[:10]  # take only the first 10 for testing
+    # paths = paths[:10]  # take only the first 10 for testing
     results = []
     for idx, p in enumerate(paths):
         print(f"Processing {idx + 1} of {len(paths)} paths.")
