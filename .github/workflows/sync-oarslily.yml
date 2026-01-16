@@ -24,6 +24,7 @@ jobs:
           shopt -s extglob dotglob # enable extended globbing and include hidden files to support usage of !(pattern)
           mv !(temp-current-repo) temp-current-repo/
           mv temp-current-repo/.github .github
+          mv temp-current-repo/.git .git
 
       - name: Clone source repository
         run: |
