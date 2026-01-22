@@ -1,8 +1,8 @@
+import json
 from osslili import LicenseCopyrightDetector, Config
 
 import os
 import time
-from collections import deque
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 path_exclusion_list = [
@@ -17,27 +17,54 @@ def _test_exclude_path(path, exclude_paths=path_exclusion_list):
     return False
 
 
+def _test_invalid_package_json(path):
+    with open(path, "r") as f:
+        j = json.load(f)
+        json_name = j.get("name", "")
+        if json_name is None or json_name.strip() == "":
+            return True
+    return False
+
+
 def _list_folders_recursive(path="."):
     paths = []
+    excluded_path_count = 0
+    excluded_package_count = 0
     for entry in os.listdir(path):
         full_path = os.path.join(path, entry)
 
         if _test_exclude_path(full_path):
             # print(f"Excluding path: {full_path}")
+            excluded_path_count += 1
             continue
 
         if os.path.isdir(full_path):
-            paths.extend(_list_folders_recursive(full_path))
+            sub_paths, sub_excluded_path_count, sub_excluded_package_count = (
+                _list_folders_recursive(full_path)
+            )
+            paths.extend(sub_paths)
+            excluded_path_count += sub_excluded_path_count
+            excluded_package_count += sub_excluded_package_count
         else:
             if full_path.endswith("package.json"):
+                if _test_invalid_package_json(full_path):
+                    excluded_package_count += 1
+                    continue
                 paths.append(path)
-    return paths
+
+    return (paths, excluded_path_count, excluded_package_count)
 
 
 def list_folders_recursive(path="."):
     start_time = time.time()
-    paths = _list_folders_recursive(path)
+    paths, excluded_path_count, excluded_package_count = _list_folders_recursive(path)
     elapsed_time = time.time() - start_time
+
+    if excluded_path_count > 0:
+        print(f"Excluded {excluded_path_count} paths in directory.")
+    if excluded_package_count > 0:
+        print(f"Excluded {excluded_package_count} invalid packages in directory.")
+
     print(
         f"Walking took {elapsed_time:.4f} seconds to find {len(paths)} paths in path: {path}"
     )
@@ -61,6 +88,7 @@ li_patterns = [
 
 
 def main(directory_path):
+    directory_path = os.path.realpath(directory_path)
     print("Hello from oarslily!")
     print(f"Scanning directory: {directory_path}")
 
