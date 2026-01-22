@@ -23,7 +23,7 @@ def _list_folders_recursive(path="."):
         full_path = os.path.join(path, entry)
 
         if _test_exclude_path(full_path):
-            print(f"Excluding path: {full_path}")
+            # print(f"Excluding path: {full_path}")
             continue
 
         if os.path.isdir(full_path):
