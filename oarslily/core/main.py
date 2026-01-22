@@ -3,7 +3,7 @@ from osslili import LicenseCopyrightDetector, Config
 import os
 import time
 from collections import deque
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 path_exclusion_list = [
     "@swc/helpers/_"  # swc helper files are not expected to have license files even though they have package.json files
@@ -78,14 +78,14 @@ def main(directory_path):
     paths = list_folders_recursive(directory_path)
 
     results = []
-    max_worker = min(
-        4, os.cpu_count() * 1
+    max_worker = max(
+        4, os.process_cpu_count() - 1  # avoid starving resources
     )  # generally assumed that I/O tasks as slow as CPU tasks
 
     # Track task completion times for ETA calculation
     overall_start_time = time.time()
     last_report_time = time.time()
-    with ThreadPoolExecutor(max_workers=max_worker) as executor:
+    with ProcessPoolExecutor(max_workers=max_worker) as executor:
         print(f"Processing with max {max_worker} workers...")
         future_to_process = {
             executor.submit(detector.process_local_path, p): p for p in paths
