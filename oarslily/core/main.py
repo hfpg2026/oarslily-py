@@ -5,11 +5,27 @@ import time
 from collections import deque
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+path_exclusion_list = [
+    "@swc/helpers/_"  # swc helper files are not expected to have license files even though they have package.json files
+]
+
+
+def _test_exclude_path(path, exclude_paths=path_exclusion_list):
+    for exclude_path in exclude_paths:
+        if path.endswith(exclude_path):
+            return True
+    return False
+
 
 def _list_folders_recursive(path="."):
     paths = []
     for entry in os.listdir(path):
         full_path = os.path.join(path, entry)
+
+        if _test_exclude_path(full_path):
+            print(f"Excluding path: {full_path}")
+            continue
+
         if os.path.isdir(full_path):
             paths.extend(_list_folders_recursive(full_path))
         else:
