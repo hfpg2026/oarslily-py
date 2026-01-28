@@ -6,7 +6,11 @@ import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 path_exclusion_list = [
-    "@swc/helpers/_"  # swc helper files are not expected to have license files even though they have package.json files
+    "@swc/helpers/_",  # swc helper files are not expected to have license files even though they have package.json files
+    "/test",  # these are likely tests fixtures in package (pino, resolver), not real packages
+    "/fixtures",  # these are likely tests fixtures in package (import-in-the-middle), not real packages
+    "/generated",  # these are generated files in the package (i.e., prisma), not real packages
+    "/babel-packages",  # these are generated files in the package, not real packages
 ]
 
 
@@ -24,6 +28,13 @@ def _test_invalid_package_json(path):
         if json_name is None or json_name.strip() == "":
             return True
     return False
+
+
+def _test_private_package_json(path):
+    with open(path, "r") as f:
+        j = json.load(f)
+        is_private = j.get("private", False)
+    return is_private is True
 
 
 def _list_folders_recursive(path="."):
@@ -48,6 +59,9 @@ def _list_folders_recursive(path="."):
         else:
             if full_path.endswith("package.json"):
                 if _test_invalid_package_json(full_path):
+                    excluded_package_count += 1
+                    continue
+                if _test_private_package_json(full_path):
                     excluded_package_count += 1
                     continue
                 paths.append(path)
@@ -98,7 +112,7 @@ def main(directory_path):
         debug=True,
         # similarity_threshold=0.95
         license_filename_patterns=li_patterns,
-        # cache_dir=".oarslily_cache",
+        cache_dir=".oarslily_cache",
     )
     # Initialize detector
     detector = LicenseCopyrightDetector(config)
