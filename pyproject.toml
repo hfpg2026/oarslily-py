@@ -6,7 +6,7 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.13"
 dependencies = [
-    "osslili @ git+https://github.com/hfpg2026/osslili@b286c74a740c0162223c16c5518387c55c832af7",
+    "osslili @ git+https://github.com/hfpg2026/osslili@ebad5ae19f2b6c453acde1940745c6ab9224b6aa",
     "pyjson5>=2.0.0",
     "python-levenshtein>=0.27.3",
     "python-tlsh>=4.5.0",

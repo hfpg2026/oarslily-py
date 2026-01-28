@@ -181,7 +181,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "osslili", git = "https://github.com/hfpg2026/osslili?rev=b286c74a740c0162223c16c5518387c55c832af7" },
+    { name = "osslili", git = "https://github.com/hfpg2026/osslili?rev=ebad5ae19f2b6c453acde1940745c6ab9224b6aa" },
     { name = "pyjson5", specifier = ">=2.0.0" },
     { name = "python-levenshtein", specifier = ">=0.27.3" },
     { name = "python-tlsh", specifier = ">=4.5.0" },
@@ -191,12 +191,13 @@ requires-dist = [
 [[package]]
 name = "osslili"
 version = "1.6.2"
-source = { git = "https://github.com/hfpg2026/osslili?rev=b286c74a740c0162223c16c5518387c55c832af7#b286c74a740c0162223c16c5518387c55c832af7" }
+source = { git = "https://github.com/hfpg2026/osslili?rev=ebad5ae19f2b6c453acde1940745c6ab9224b6aa#ebad5ae19f2b6c453acde1940745c6ab9224b6aa" }
 dependencies = [
     { name = "click" },
     { name = "colorama" },
     { name = "fuzzywuzzy" },
     { name = "packageurl-python" },
+    { name = "python-levenshtein" },
     { name = "pyyaml" },
     { name = "requests" },
 ]
