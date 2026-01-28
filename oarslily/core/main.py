@@ -5,12 +5,24 @@ import os
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
+# this lists prevents known false positive packages from being recursed in the walk
 path_exclusion_list = [
     "@swc/helpers/_",  # swc helper files are not expected to have license files even though they have package.json files
     "/test",  # these are likely tests fixtures in package (pino, resolver), not real packages
     "/fixtures",  # these are likely tests fixtures in package (import-in-the-middle), not real packages
     "/generated",  # these are generated files in the package (i.e., prisma), not real packages
     "/babel-packages",  # these are generated files in the package, not real packages
+    "/next/dist/compiled/constants-browserify",  # false positive due to special file
+    "/secure-json-parse/benchmarks",  # benchmarks folder, not real package
+    "/libdatadog/prebuilds",  # prebuilds folder, not real package
+]
+
+spdx_id_exclusion_substrings = [
+    "SEE LICENSE IN",  # placeholder, not a real SPDX ID
+    "tsc --noEmit",
+    "MIT License. See the LICENSE file",
+    "MIT license found in the",
+    "its MIT license",
 ]
 
 
@@ -62,6 +74,12 @@ def _list_folders_recursive(path="."):
                     excluded_package_count += 1
                     continue
                 if _test_private_package_json(full_path):
+                    excluded_package_count += 1
+                    continue
+
+                # exclude path if it does not include "node_modules" in the path as it
+                # will be a local package in the source code
+                if "node_modules" not in full_path:
                     excluded_package_count += 1
                     continue
                 paths.append(path)
@@ -137,6 +155,14 @@ def main(directory_path):
             # Because we're now running them asynchronously, the results may come back out of order
             # If we need the results to be deterministically ordered, we will need to sort them later based on the path
             result = future.result(timeout=10)
+
+            # excluding detected licenses based on exclusion lists
+            result.licenses = [
+                l
+                for l in result.licenses
+                if all(sub not in l.spdx_id for sub in spdx_id_exclusion_substrings)
+            ]
+
             results.append(result)
             idx += 1
 
