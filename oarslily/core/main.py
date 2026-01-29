@@ -23,6 +23,7 @@ spdx_id_exclusion_substrings = [
     "MIT License. See the LICENSE file",
     "MIT license found in the",
     "its MIT license",
+    "BSD3.",  # incorrect textual capture with period, it should already detected a separate BSD-3-Clause
 ]
 
 
